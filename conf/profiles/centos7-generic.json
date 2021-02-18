@@ -1,0 +1,70 @@
+{
+  "builders": [
+    {
+      "CPUs": "{{user `vm_CPU`}}",
+      "RAM": "{{user `vm_RAM`}}",
+      "boot_command": [
+        "<esc><wait>",
+        "linux inst.ks=__KICKSTART",
+        "<enter>"
+      ],
+      "cluster": "{{user `vcenter_Cluster`}}",
+      "cpu_cores": "{{user `vm_CPU`}}",
+      "datacenter": "{{user `vcenter_Datacenter`}}",
+      "datastore": "{{user `vcenter_Datastore`}}",
+      "disk_controller_type": "pvscsi",
+      "firmware": "bios",
+      "folder": "{{user `vcenter_Folder`}}",
+      "guest_os_type": "{{user `vm_OStype`}}",
+      "host": "{{user `vcenter_Host`}}",
+      "insecure_connection": "true",
+      "iso_checksum": "sha256:6d44331cc4f6c506c7bbe9feb8468fad6c51a88ca1393ca6b8b486ea04bec3c1",
+      "iso_paths": [
+        "[DATASTORE] PATH"
+      ],
+      "network_adapters": [
+        {
+          "network": "{{user `vm_Vlan`}}",
+          "network_card": "vmxnet3"
+        }
+      ],
+      "notes": "{{user `vm_Notes`}}",
+      "password": "{{user `vcenter_Pass`}}",
+      "shutdown_command": "poweroff",
+      "ssh_agent_auth": "false",
+      "ssh_private_key_file": "./conf/sshkeys/packer_key",
+      "ssh_username": "root",
+      "storage": [
+        {
+          "disk_size": "{{user `vm_Disk`}}",
+          "disk_thin_provisioned": "false"
+        }
+      ],
+      "type": "vsphere-iso",
+      "username": "{{user `vcenter_User`}}",
+      "vcenter_server": "{{user `vcenter_Vcenter`}}",
+      "vm_name": "{{user `vm_Name`}}"
+    }
+  ],
+  "post-processors": [],
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "./conf/scripts/zabbix.sh",
+        "./conf/scripts/centos8-network.sh"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline": ["mkdir -p /root/scripts"]
+    },
+    {
+      "type": "file",
+      "destination": "/root/scripts/addToDomain.sh",
+      "source": "./conf/scripts/addToDomain.sh"
+    }
+
+  ]
+}
+
