@@ -51,7 +51,7 @@ clear
 
 
 echo -e "$cOTHER""VM Builder script"
-echo -e "CopyLeft Marian\n"
+echo -e "CopyLeft LeMarian\n"
 echo -e "$cOUTPUT""Please enter machine specific parameters."
 
 read -p "$(echo -e $cOUTPUT"Hostname: "$cINPUT)" -i "$vmHOSTNAME" -e userInput 
